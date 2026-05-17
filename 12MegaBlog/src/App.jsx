@@ -3,7 +3,9 @@ import { useDispatch } from "react-redux";
 import { Header, Footer } from "./components/index.js";
 import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
+import { Outlet } from "react-router-dom";
 import "./App.css";
+
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -13,7 +15,13 @@ function App() {
       .getCurrentUser()
       .then((userData) => {
         if (userData) {
-          dispatch(login({ userData }));
+          dispatch(login({ 
+            userData: {
+              id: userData.$id,
+              name: userData.name,
+              email: userData.email,
+            },
+          }));
         } else {
           dispatch(logout());
         }
@@ -24,7 +32,7 @@ function App() {
     <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
       <div className="w-full block">
         <Header />
-        <main>TODO: {/* Outlet */}</main>
+        <main>TODO: <Outlet/></main>
         <Footer />
       </div>
     </div>
